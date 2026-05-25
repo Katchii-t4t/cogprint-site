@@ -120,9 +120,11 @@ function drawFlag(ctx: CanvasRenderingContext2D, emoji: string) {
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type NNode  = { x: number; y: number; adj: number[] };
+type NNode  = { x: number; y: number; adj: number[]; ghost?: boolean };
 type NEdge  = { i: number; j: number; cpx: number; cpy: number; mx: number; my: number };
-type Stub   = { x0: number; y0: number; cpx: number; cpy: number; x1: number; y1: number };
+type Stub   = { x0: number; y0: number; baseCpx: number; baseCpy: number;
+                baseTipX: number; baseTipY: number;
+                phase: number; freq: number; amp: number };
 type Signal = { from: number; to: number; ei: number; t: number; speed: number };
 type Burst  = { x: number; y: number; age: number; r: number; g: number; b: number };
 
@@ -145,7 +147,7 @@ export default function NerveNetworkFooter() {
     const bgCv  = document.createElement("canvas");
     let bgCtx: CanvasRenderingContext2D;
 
-    let raf = 0, prev = 0, fi = -1;
+    let raf = 0, prev = 0, fi = -1, time = 0;
     let nodes:   NNode[]  = [];
     let edges:   NEdge[]  = [];
     let stubs:   Stub[]   = [];
@@ -180,31 +182,41 @@ export default function NerveNetworkFooter() {
       bgCtx = bgCv.getContext("2d")!;
       bgCtx.lineCap = "round";
 
-      // Dendritic stubs (thinnest, dimmest)
-      bgCtx.strokeStyle = "rgba(0,229,255,0.045)";
-      bgCtx.lineWidth   = 0.45;
-      for (const s of stubs) {
-        bgCtx.beginPath();
-        bgCtx.moveTo(s.x0, s.y0);
-        bgCtx.quadraticCurveTo(s.cpx, s.cpy, s.x1, s.y1);
-        bgCtx.stroke();
-      }
-
-      // Main axon edges
-      bgCtx.strokeStyle = "rgba(0,229,255,0.08)";
-      bgCtx.lineWidth   = 0.7;
+      // Axon edges (long myelinated fibres between visible somas only)
+      bgCtx.strokeStyle = "rgba(0,229,255,0.13)";
+      bgCtx.lineWidth   = 0.9;
       for (const e of edges) {
+        if (nodes[e.i].ghost || nodes[e.j].ghost) continue;
         bgCtx.beginPath();
         bgCtx.moveTo(nodes[e.i].x, nodes[e.i].y);
         bgCtx.quadraticCurveTo(e.cpx, e.cpy, nodes[e.j].x, nodes[e.j].y);
         bgCtx.stroke();
       }
 
-      // Node soma dots
-      bgCtx.fillStyle = "rgba(0,229,255,0.14)";
+      // Soma (cell body) — three concentric layers like a real neuron cross-section
       for (const n of nodes) {
+        if (n.ghost) continue;
+        // a) Cytoplasm glow — soft wide halo
+        const halo = bgCtx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 8);
+        halo.addColorStop(0,   "rgba(0,229,255,0.09)");
+        halo.addColorStop(0.6, "rgba(0,229,255,0.04)");
+        halo.addColorStop(1,   "rgba(0,229,255,0.00)");
+        bgCtx.fillStyle = halo;
         bgCtx.beginPath();
-        bgCtx.arc(n.x, n.y, 1.5, 0, Math.PI * 2);
+        bgCtx.arc(n.x, n.y, 8, 0, Math.PI * 2);
+        bgCtx.fill();
+
+        // b) Cell membrane ring
+        bgCtx.strokeStyle = "rgba(0,229,255,0.32)";
+        bgCtx.lineWidth   = 0.8;
+        bgCtx.beginPath();
+        bgCtx.arc(n.x, n.y, 4.2, 0, Math.PI * 2);
+        bgCtx.stroke();
+
+        // c) Nucleus (bright centre dot)
+        bgCtx.fillStyle = "rgba(0,229,255,0.60)";
+        bgCtx.beginPath();
+        bgCtx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
         bgCtx.fill();
       }
     }
@@ -256,26 +268,62 @@ export default function NerveNetworkFooter() {
           });
         }
       }
-      eAlpha = new Float32Array(edges.length);
-
-      // Dendritic stubs: 2–4 per node, random angles, dead-ends
+      // Dendritic stubs: 2–4 per visible node, store base positions + animation params
       for (const n of nodes) {
-        const nStubs = 2 + Math.floor(Math.random() * 3); // 2–4
+        const nStubs = 2 + Math.floor(Math.random() * 3);
         for (let s = 0; s < nStubs; s++) {
-          const angle = Math.random() * Math.PI * 2;
-          const len   = 14 + Math.random() * 44;
-          const tip   = { x: n.x + Math.cos(angle) * len, y: n.y + Math.sin(angle) * len };
-          const pa    = angle + Math.PI / 2;
-          const bend  = (Math.random() - 0.5) * len * 0.45;
+          const angle   = Math.random() * Math.PI * 2;
+          const len     = 16 + Math.random() * 40;
+          const tipX    = n.x + Math.cos(angle) * len;
+          const tipY    = n.y + Math.sin(angle) * len;
+          const pa      = angle + Math.PI / 2;
+          const bend    = (Math.random() - 0.5) * len * 0.45;
           stubs.push({
             x0: n.x, y0: n.y,
-            cpx: (n.x + tip.x) / 2 + Math.cos(pa) * bend,
-            cpy: (n.y + tip.y) / 2 + Math.sin(pa) * bend,
-            x1: tip.x, y1: tip.y,
+            baseCpx:  (n.x + tipX) / 2 + Math.cos(pa) * bend,
+            baseCpy:  (n.y + tipY) / 2 + Math.sin(pa) * bend,
+            baseTipX: tipX, baseTipY: tipY,
+            phase: Math.random() * Math.PI * 2,
+            freq:  0.35 + Math.random() * 0.55,  // rad/s — slow organic drift
+            amp:   3 + Math.random() * 5,         // 3–8 px oscillation radius
           });
         }
       }
 
+      // Ghost sink nodes — just off-screen, so signals flow out naturally at each edge
+      const GHOST_N = 16;
+      for (let k = 0; k < GHOST_N; k++) {
+        const side = k % 4;
+        const gx = side === 0 ? -70 : side === 1 ? W + 70 : (0.1 + 0.8 * Math.random()) * W;
+        const gy = side === 2 ? -70 : side === 3 ? H + 70 : (0.1 + 0.8 * Math.random()) * H;
+        nodes.push({ x: gx, y: gy, adj: [], ghost: true });
+      }
+      // Connect each ghost to reachable visible nodes
+      const visN = nodes.length - GHOST_N;
+      for (let gi = visN; gi < nodes.length; gi++) {
+        for (let a = 0; a < visN; a++) {
+          const dx = nodes[gi].x - nodes[a].x;
+          const dy = nodes[gi].y - nodes[a].y;
+          if (dx * dx + dy * dy >= maxD2 * 2.2) continue;
+          nodes[gi].adj.push(a); nodes[a].adj.push(gi);
+          const len2 = Math.sqrt(dx * dx + dy * dy);
+          const mx2  = (nodes[gi].x + nodes[a].x) / 2;
+          const my2  = (nodes[gi].y + nodes[a].y) / 2;
+          const px   = -dy / len2, py = dx / len2;
+          const bnd  = (Math.random() * 2 - 1) * len2 * 0.10;
+          const cpx  = mx2 + px * bnd;
+          const cpy  = my2 + py * bnd;
+          const ei   = edges.length;
+          eMap.set(`${gi},${a}`, ei); eMap.set(`${a},${gi}`, ei);
+          edges.push({
+            i: gi, j: a, cpx, cpy,
+            mx: qb(0.5, nodes[gi].x, cpx, nodes[a].x),
+            my: qb(0.5, nodes[gi].y, cpy, nodes[a].y),
+          });
+        }
+      }
+
+      eAlpha = new Float32Array(edges.length);
       renderBg();
     }
 
@@ -320,7 +368,7 @@ export default function NerveNetworkFooter() {
     // ── Main animation frame ──────────────────────────────────────────────────
     function frame(ts: number) {
       const dt = Math.min((ts - prev) / 1000, 0.05);
-      prev = ts;
+      prev = ts; time += dt;
       const W = cv.width, H = cv.height;
 
       // ── Advance signals ───────────────────────────────────────────────
@@ -333,20 +381,23 @@ export default function NerveNetworkFooter() {
           next.push(s);
         } else if (!activated.has(s.to)) {
           activated.add(s.to);
-          const dn = nodes[s.to];
-          const [r, g, b] = sample(dn.x, dn.y);
-          bursts.push({ x: dn.x, y: dn.y, age: 0, r, g, b });
-
-          for (const nb of nodes[s.to].adj) {
-            if (pending.has(nb)) continue;
-            pending.add(nb);
-            const nei = eMap.get(`${s.to},${nb}`);
-            if (nei === undefined) continue;
-            const ne  = edges[nei];
-            const dx  = nodes[ne.i].x - nodes[ne.j].x;
-            const dy  = nodes[ne.i].y - nodes[ne.j].y;
-            next.push({ from: s.to, to: nb, ei: nei, t: 0, speed: 250 / Math.sqrt(dx * dx + dy * dy) });
+          if (!nodes[s.to].ghost) {
+            // Visible node — burst + BFS expansion
+            const dn = nodes[s.to];
+            const [r, g, b] = sample(dn.x, dn.y);
+            bursts.push({ x: dn.x, y: dn.y, age: 0, r, g, b });
+            for (const nb of nodes[s.to].adj) {
+              if (pending.has(nb)) continue;
+              pending.add(nb);
+              const nei = eMap.get(`${s.to},${nb}`);
+              if (nei === undefined) continue;
+              const ne  = edges[nei];
+              const dx  = nodes[ne.i].x - nodes[ne.j].x;
+              const dy  = nodes[ne.i].y - nodes[ne.j].y;
+              next.push({ from: s.to, to: nb, ei: nei, t: 0, speed: 250 / Math.sqrt(dx * dx + dy * dy) });
+            }
           }
+          // Ghost node: signal absorbed silently off-screen — no burst, no expansion
         }
       }
       signals = next;
@@ -368,8 +419,25 @@ export default function NerveNetworkFooter() {
       // ── Draw ──────────────────────────────────────────────────────────
       ctx.clearRect(0, 0, W, H);
 
-      // 1. Static background (pre-rendered: stubs + dim edges + dim nodes) — 1 call
+      // 1. Static background (pre-rendered: dim edges + soma rings)
       ctx.drawImage(bgCv, 0, 0);
+
+      // 1b. Animated dendritic stubs — drift slowly in lazy circles
+      ctx.lineCap    = "round";
+      ctx.lineWidth  = 0.75;
+      ctx.strokeStyle = "rgba(0,229,255,0.13)";
+      for (const s of stubs) {
+        const t1 = s.phase + time * s.freq;
+        const t2 = s.phase * 1.618 + time * s.freq * 0.73;
+        const ax  = s.baseTipX + Math.cos(t1) * s.amp;
+        const ay  = s.baseTipY + Math.sin(t2) * s.amp;
+        const acx = s.baseCpx  + Math.cos(t1) * s.amp * 0.38;
+        const acy = s.baseCpy  + Math.sin(t2) * s.amp * 0.38;
+        ctx.beginPath();
+        ctx.moveTo(s.x0, s.y0);
+        ctx.quadraticCurveTo(acx, acy, ax, ay);
+        ctx.stroke();
+      }
 
       // 2. Flag watermark
       ctx.globalAlpha = 0.055;
@@ -401,12 +469,28 @@ export default function NerveNetworkFooter() {
         ctx.stroke();
       }
 
-      // 4. Activated node dots (on top of bg)
+      // 4. Activated soma — flag-coloured three-layer cell body
       for (const i of activated) {
-        const n        = nodes[i];
+        const n = nodes[i];
+        if (n.ghost) continue;
         const [r, g, b] = sample(n.x, n.y);
-        ctx.fillStyle  = `rgba(${r},${g},${b},0.65)`;
-        ctx.beginPath(); ctx.arc(n.x, n.y, 2.4, 0, Math.PI * 2); ctx.fill();
+
+        // Cytoplasm halo
+        const halo = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 10);
+        halo.addColorStop(0,   `rgba(${r},${g},${b},0.20)`);
+        halo.addColorStop(0.5, `rgba(${r},${g},${b},0.08)`);
+        halo.addColorStop(1,   `rgba(${r},${g},${b},0.00)`);
+        ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 10, 0, Math.PI * 2); ctx.fill();
+
+        // Cell membrane ring
+        ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
+        ctx.lineWidth   = 1.0;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 4.2, 0, Math.PI * 2); ctx.stroke();
+
+        // Nucleus
+        ctx.fillStyle = `rgba(${r},${g},${b},1)`;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 2.0, 0, Math.PI * 2); ctx.fill();
       }
 
       // 5. Active signal trails — linear gradient comet + white core streak + head bloom
