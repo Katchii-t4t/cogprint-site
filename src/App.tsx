@@ -9,6 +9,7 @@ import Technology from "./sections/Technology";
 import JoinUs from "./sections/JoinUs";
 import Team from "./sections/Team";
 import NeuralInterlude from "./components/NeuralInterlude";
+import NerveNetworkFooter from "./components/NerveNetworkFooter";
 
 function FooterLogo() {
   const [ok, setOk] = useState(true);
@@ -110,6 +111,8 @@ export default function App() {
         <JoinUs />
         <Team />
       </div>
+
+      <NerveNetworkFooter />
 
       <Footer />
     </div>

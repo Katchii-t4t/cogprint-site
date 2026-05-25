@@ -168,17 +168,6 @@ export default function Team() {
           ))}
         </div>
 
-        {/* World flags strip */}
-        <div className="mt-10 pt-6 border-t border-gray-100">
-          <p className="text-xs text-gray-400 mb-3 text-center tracking-wide uppercase font-mono">
-            Our team spans
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 text-2xl">
-            {[...new Set(TEAM.filter(m => m.flag).map(m => m.flag))].map((flag) => (
-              <span key={flag}>{flag}</span>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
