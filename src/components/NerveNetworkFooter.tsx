@@ -131,7 +131,7 @@ export default function NerveNetworkFooter() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const cv = canvasRef.current;
+    const cv = canvasRef.current!;   // non-null: effect only runs after mount
     if (!cv) return;
     const ctx = cv.getContext("2d")!;
 
