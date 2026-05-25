@@ -7,9 +7,9 @@ export default function NeuralInterlude() {
       {/* Animated neural network fills the background */}
       <NeuralNetworkBg className="absolute inset-0 w-full h-full" />
 
-      {/* Gradient fades into the white sections above and below */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white" />
-      <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40" />
+      {/* Gradient fades into the light sections above and below */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-transparent to-slate-100" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-100/40 via-transparent to-slate-100/40" />
 
       {/* Central quote */}
       <div className="relative z-10 text-center max-w-3xl px-8">

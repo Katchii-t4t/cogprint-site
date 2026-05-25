@@ -87,7 +87,7 @@ export default function App() {
       <Hero />
 
       {/* ── Light content sections ── */}
-      <div className="bg-white">
+      <div className="bg-slate-100">
         <Mission />
         <Research />
       </div>
@@ -96,7 +96,7 @@ export default function App() {
       <NeuralInterlude />
 
       {/* ── More light content sections ── */}
-      <div className="bg-white">
+      <div className="bg-slate-100">
         <HowItWorks />
         <Technology />
         <JoinUs />
