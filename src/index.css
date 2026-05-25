@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cog-bg:       #060B1A;
+  --cog-cyan:     #00E5FF;
+  --cog-purple:   #7c3aed;
+  /* Jewel tones — used by SpineNav vertebrae */
+  --cog-sapphire: #1E5CAA;
+  --cog-amethyst: #6B3FA0;
+  --cog-jade:     #1A8C72;
+  --cog-amber:    #B87820;
+  --cog-ruby:     #A01A4A;
+}
+
+* { scroll-behavior: smooth; }
+
+html { background: var(--cog-bg); }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--cog-bg);
+  color: #e2e8f0;
+  overflow-x: hidden;
+}
+
+/* ── Light section overrides ─────────────────── */
+.light-section {
+  background: #ffffff;
+  color: #111827;
+}
+.light-section h2,
+.light-section h3 { color: #0f172a; }
+.light-section p   { color: #4b5563; }
+
+.light-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.light-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+.light-tag {
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.cred-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Subtle grain/noise overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px;
+}
+
+/* ── Neural network background animations ───────── */
+@keyframes neural-signal {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -80; }
+}
+@keyframes neural-soma-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1; }
+}
+
+/* ── Brain hero character animations ─────────── */
+@keyframes brain-drift {
+  0%   { transform: translate(  0px,   0px) rotate( 0.0deg); }
+  20%  { transform: translate(  6px, -20px) rotate( 1.5deg); }
+  50%  { transform: translate(  2px, -28px) rotate( 0.3deg); }
+  75%  { transform: translate( -6px, -16px) rotate(-1.5deg); }
+  100% { transform: translate(  0px,   0px) rotate( 0.0deg); }
+}
+@keyframes brain-aura-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1.0);  }
+  50%       { opacity: 0.72; transform: scale(1.25); }
+}
+@keyframes spine-signal-down {
+  from { stroke-dashoffset:   0; }
+  to   { stroke-dashoffset: -48; }
+}
+
+/* Hex grid background — used in hero */
+.hex-grid {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(0,229,255,0.04) 1px, transparent 0);
+  background-size: 48px 48px;
+}
+
+/* Spine line */
+.spine-line {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0,229,255,0.15) 5%,
+    rgba(0,229,255,0.4) 20%,
+    rgba(0,229,255,0.4) 80%,
+    rgba(124,58,237,0.3) 95%,
+    transparent
+  );
+}
+
+/* Vertebra hex shape */
+.vertebra {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  transition: all 0.4s ease;
+}
+
+/* Section reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Glassmorphism card (dark sections) */
+.glass-card {
+  background: rgba(13, 22, 40, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,229,255,0.12);
+}
+
+/* Glow text */
+.glow-text {
+  text-shadow: 0 0 30px rgba(0,229,255,0.5);
+}
+
+/* Data rain */
+.data-column {
+  writing-mode: vertical-rl;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(0,229,255,0.18);
+  letter-spacing: 4px;
+  user-select: none;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #060B1A; }
+::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 2px; }
+
+/* Section min height */
+.section-full {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
