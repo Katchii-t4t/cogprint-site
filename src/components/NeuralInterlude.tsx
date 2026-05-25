@@ -8,8 +8,8 @@ export default function NeuralInterlude() {
       <NeuralNetworkBg className="absolute inset-0 w-full h-full" />
 
       {/* Gradient fades into the light sections above and below */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-transparent to-slate-100" />
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-100/40 via-transparent to-slate-100/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#E5E7EB] via-transparent to-slate-100" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#E5E7EB]/40 via-transparent to-slate-100/40" />
 
       {/* Central quote */}
       <div className="relative z-10 text-center max-w-3xl px-8">

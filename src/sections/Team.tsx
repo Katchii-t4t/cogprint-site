@@ -34,9 +34,9 @@ const TEAM: { name: string; country: string; flag: string; role?: string; cat: C
   { name: "Rishi U",       country: "India",      flag: "🇮🇳", role: "Software Developer",         cat: "tech"     },
   // Research
   { name: "Aiman A",       country: "Pakistan",   flag: "🇵🇰", role: "Med Student (4th yr)",       cat: "research" },
-  { name: "Saiyara S",     country: "Bangladesh", flag: "🇧🇩", role: "Literature Review",          cat: "research" },
+  { name: "Saiyara S",     country: "Bangladesh", flag: "🇧🇩", role: "Design",                     cat: "social"   },
   { name: "Lycia M",       country: "Canada",     flag: "🇨🇦", role: "Medical School",             cat: "research" },
-  { name: "Ayesha N",      country: "Pakistan",   flag: "🇵🇰", role: "Pre-Med Graduate",           cat: "research" },
+  { name: "Ayesha N",      country: "Pakistan",   flag: "🇵🇰", role: "Pre-Med · Research & Social", cat: "social"   },
   { name: "Elisa",         country: "Ghana",      flag: "🇬🇭", role: "Data Collection",            cat: "research" },
   { name: "Amna A",        country: "Sri Lanka",  flag: "🇱🇰", role: "Biomed (Uni)",               cat: "research" },
   { name: "Alia H",        country: "Malaysia",   flag: "🇲🇾",                                     cat: "research" },

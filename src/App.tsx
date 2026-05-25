@@ -86,8 +86,16 @@ export default function App() {
       <SpineNav />
       <Hero />
 
+      {/* ── Gradient bridge: dark hero → light sections ── */}
+      <div
+        style={{
+          height: "220px",
+          background: "linear-gradient(to bottom, #060B1A 0%, #0e1e35 18%, #1e3a55 38%, #4a6878 58%, #8fa5b0 78%, #E5E7EB 100%)",
+        }}
+      />
+
       {/* ── Light content sections ── */}
-      <div className="bg-slate-100">
+      <div className="bg-[#E5E7EB]">
         <Mission />
         <Research />
       </div>
@@ -96,7 +104,7 @@ export default function App() {
       <NeuralInterlude />
 
       {/* ── More light content sections ── */}
-      <div className="bg-slate-100">
+      <div className="bg-[#E5E7EB]">
         <HowItWorks />
         <Technology />
         <JoinUs />

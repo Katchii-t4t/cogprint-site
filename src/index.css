@@ -27,7 +27,7 @@ body {
 
 /* ── Light section overrides ─────────────────── */
 .light-section {
-  background: #f1f5f9;
+  background: #E5E7EB;
   color: #111827;
 }
 .light-section h2,
@@ -36,7 +36,7 @@ body {
 
 .light-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #d1d5db;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 .light-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
