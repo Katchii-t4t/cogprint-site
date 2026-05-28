@@ -25,10 +25,10 @@ const BADGE: Record<Category, string> = {
   social:   "border-pink-300   text-pink-700   bg-pink-50",
 };
 
-const TEAM: { name: string; country: string; flag: string; role?: string; cat: Category; founding?: boolean }[] = [
+const TEAM: { name: string; country: string; flag: string; role?: string; cat: Category; badgeCat?: Category; founding?: boolean }[] = [
   // Lead
-  { name: "Katchi S",      country: "Norway",     flag: "🇳🇴", role: "Project Lead",              cat: "lead"     },
-  { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Co-Lead",                    cat: "lead"     },
+  { name: "Katchi S",      country: "Norway",     flag: "🇳🇴", role: "Project & Tech Lead",                  cat: "lead", badgeCat: "social" },
+  { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Project Co-lead & Social Media Lead",   cat: "lead", badgeCat: "social" },
   // Tech
   { name: "Kevin N",       country: "Norway",     flag: "🇳🇴", role: "Data & Statistics",          cat: "tech"     },
   { name: "Rishi U",       country: "India",      flag: "🇮🇳", role: "Software Developer",         cat: "tech"     },
@@ -42,7 +42,6 @@ const TEAM: { name: string; country: string; flag: string; role?: string; cat: C
   { name: "Alia H",        country: "Malaysia",   flag: "🇲🇾",                                     cat: "research" },
   { name: "Anumta R",      country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Tony W",        country: "China",      flag: "🇨🇳",                                     cat: "research" },
-  { name: "Tassnim C",     country: "Morocco",    flag: "🇲🇦",                                     cat: "research" },
   { name: "Sambriddhi C",  country: "Nepal",      flag: "🇳🇵",                                     cat: "research", founding: true },
   { name: "Rameen S",      country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Linda A",       country: "Iraq",       flag: "🇮🇶",                                     cat: "research" },
@@ -50,8 +49,9 @@ const TEAM: { name: string; country: string; flag: string; role?: string; cat: C
   { name: "Stacy A",       country: "Jamaica",    flag: "🇯🇲",                                     cat: "research" },
   { name: "Sameeha A",     country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Viana D",       country: "Canada",     flag: "🇨🇦", role: "Outreach Responsible",       cat: "research", founding: true },
-  // Social Media
-  { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Social Media Lead",            cat: "social"   },
+  // Social Media — leads first
+  { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Social Media Lead",           cat: "social"   },
+  { name: "Tassnim C",    country: "Morocco",    flag: "🇲🇦", role: "Social Media Co-lead",        cat: "social"   },
   { name: "Fardowsa A",   country: "USA",         flag: "🇺🇸", role: "Marketing",                  cat: "social"   },
   { name: "Rahma",         country: "Nigeria",    flag: "🇳🇬", role: "Content & Outreach",         cat: "social"   },
   { name: "Dagmawit A",   country: "Ethiopia",    flag: "🇪🇹",                                     cat: "social"   },
@@ -160,7 +160,7 @@ export default function Team() {
                 <div className="text-xs text-gray-400 mt-0.5">{member.country}</div>
               )}
               {member.role && (
-                <div className={`text-[10px] font-medium mt-2 px-2 py-0.5 rounded-full border ${BADGE[member.cat]}`}>
+                <div className={`text-[10px] font-medium mt-2 px-2 py-0.5 rounded-full border ${BADGE[member.badgeCat ?? member.cat]}`}>
                   {member.role}
                 </div>
               )}
