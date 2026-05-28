@@ -49,10 +49,11 @@ const TEAM: { name: string; country: string; flag: string; role?: string; cat: C
   { name: "Stacy A",       country: "Jamaica",    flag: "🇯🇲",                                     cat: "research" },
   { name: "Sameeha A",     country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Viana D",       country: "Canada",     flag: "🇨🇦", role: "Outreach Responsible",       cat: "research", founding: true },
+  { name: "Lynn A",        country: "Saudi Arabia", flag: "🇸🇦",                                   cat: "research" },
   // Social Media — leads first
   { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Social Media Lead",           cat: "social"   },
-  { name: "Tassnim C",    country: "Morocco",    flag: "🇲🇦", role: "Social Media Co-lead",        cat: "social"   },
-  { name: "Fardowsa A",   country: "USA",         flag: "🇺🇸", role: "Marketing",                  cat: "social"   },
+  { name: "Tassnim CH",   country: "Morocco",    flag: "🇲🇦", role: "Social Media Co-lead",        cat: "social"   },
+  { name: "Fardowsa A",   country: "United States of America", flag: "🇺🇸", role: "Marketing",     cat: "social"   },
   { name: "Rahma",         country: "Nigeria",    flag: "🇳🇬", role: "Content & Outreach",         cat: "social"   },
   { name: "Dagmawit A",   country: "Ethiopia",    flag: "🇪🇹",                                     cat: "social"   },
 ];
@@ -76,7 +77,7 @@ export default function Team() {
   // Continent mapping
   const continents = new Set(
     TEAM.filter((m) => m.flag).map((m) => {
-      const asia     = ["🇵🇰","🇧🇩","🇲🇾","🇨🇳","🇮🇳","🇳🇵","🇮🇶","🇱🇰"];
+      const asia     = ["🇵🇰","🇧🇩","🇲🇾","🇨🇳","🇮🇳","🇳🇵","🇮🇶","🇱🇰","🇸🇦"];
       const africa   = ["🇳🇬","🇬🇭","🇪🇹","🇲🇦"];
       const namerica = ["🇨🇦","🇺🇸","🇯🇲"];
       const europe   = ["🇳🇴"];
