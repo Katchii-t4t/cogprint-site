@@ -25,7 +25,7 @@ const BADGE: Record<Category, string> = {
   social:   "border-pink-300   text-pink-700   bg-pink-50",
 };
 
-const TEAM: { name: string; country: string; flag: string; role?: string; cat: Category }[] = [
+const TEAM: { name: string; country: string; flag: string; role?: string; cat: Category; founding?: boolean }[] = [
   // Lead
   { name: "Katchi S",      country: "Norway",     flag: "🇳🇴", role: "Project Lead",              cat: "lead"     },
   { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Co-Lead",                    cat: "lead"     },
@@ -38,18 +38,18 @@ const TEAM: { name: string; country: string; flag: string; role?: string; cat: C
   { name: "Lycia M",       country: "Canada",     flag: "🇨🇦", role: "Medical School",             cat: "research" },
   { name: "Ayesha N",      country: "Pakistan",   flag: "🇵🇰", role: "Pre-Med · Research & Social", cat: "social"   },
   { name: "Elisa",         country: "Ghana",      flag: "🇬🇭", role: "Data Collection",            cat: "research" },
-  { name: "Amna A",        country: "Sri Lanka",  flag: "🇱🇰", role: "Biomed (Uni)",               cat: "research" },
+  { name: "Amna A",        country: "Sri Lanka",  flag: "🇱🇰", role: "Biomed (Uni)",               cat: "research", founding: true },
   { name: "Alia H",        country: "Malaysia",   flag: "🇲🇾",                                     cat: "research" },
   { name: "Anumta R",      country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Tony W",        country: "China",      flag: "🇨🇳",                                     cat: "research" },
   { name: "Tassnim C",     country: "Morocco",    flag: "🇲🇦",                                     cat: "research" },
-  { name: "Sambriddhi C",  country: "Nepal",      flag: "🇳🇵",                                     cat: "research" },
+  { name: "Sambriddhi C",  country: "Nepal",      flag: "🇳🇵",                                     cat: "research", founding: true },
   { name: "Rameen S",      country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
   { name: "Linda A",       country: "Iraq",       flag: "🇮🇶",                                     cat: "research" },
   { name: "Nava M",        country: "Canada",     flag: "🇨🇦",                                     cat: "research" },
   { name: "Stacy A",       country: "Jamaica",    flag: "🇯🇲",                                     cat: "research" },
   { name: "Sameeha A",     country: "Pakistan",   flag: "🇵🇰",                                     cat: "research" },
-  { name: "Viana",         country: "",           flag: "",                                         cat: "research" },
+  { name: "Viana D",       country: "Canada",     flag: "🇨🇦", role: "Outreach Responsible",       cat: "research", founding: true },
   // Social Media
   { name: "Azeemah S",    country: "Bangladesh", flag: "🇧🇩", role: "Social Media Lead",            cat: "social"   },
   { name: "Fardowsa A",   country: "USA",         flag: "🇺🇸", role: "Marketing",                  cat: "social"   },
@@ -162,6 +162,11 @@ export default function Team() {
               {member.role && (
                 <div className={`text-[10px] font-medium mt-2 px-2 py-0.5 rounded-full border ${BADGE[member.cat]}`}>
                   {member.role}
+                </div>
+              )}
+              {member.founding && (
+                <div className="text-[9px] font-semibold mt-1.5 px-2 py-0.5 rounded-full border border-amber-300 text-amber-700 bg-amber-50 tracking-wide">
+                  ✦ Founding Member
                 </div>
               )}
             </div>
