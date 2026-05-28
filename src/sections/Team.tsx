@@ -106,7 +106,7 @@ export default function Team() {
         {/* Global stats */}
         <div className="flex flex-wrap gap-4 mb-10">
           {[
-            { value: String(TEAM.length),                                                           label: "Members"    },
+            { value: String(new Set(TEAM.map(m => m.name)).size),                                    label: "Members"    },
             { value: String(new Set(TEAM.filter(m => m.country).map(m => m.country)).size),         label: "Countries"  },
             { value: String(continents.size),                                                       label: "Continents" },
             { value: "Youth-Led",                                                                   label: "Identity"   },
