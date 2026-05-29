@@ -6,7 +6,7 @@ function LogoImg() {
   if (!ok) return null;
   return (
     <img
-      src="/logo.png"
+      src="/official_logo.png"
       alt="CogPrint"
       className="w-9 h-9 rounded-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
       style={{ filter: "drop-shadow(0 0 8px rgba(0,229,255,0.35))" }}

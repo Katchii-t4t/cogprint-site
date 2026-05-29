@@ -23,7 +23,7 @@ function FooterLogo() {
   }
   return (
     <img
-      src="/logo.png"
+      src="/official_logo.png"
       alt="CogPrint"
       className="w-10 h-10 rounded-full object-cover opacity-80 shrink-0"
       onError={() => setOk(false)}
