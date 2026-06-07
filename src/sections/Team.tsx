@@ -46,15 +46,16 @@ type TeamMember = {
   badgeCat?: Category;
   founding?: boolean;
   featured?: boolean; // true = leader card shown at top of tab
+  founder?: boolean;  // special gold Founder badge
 };
 
 const TEAM: TeamMember[] = [
   // ── Lead ─────────────────────────────────────────────────────────────
-  { name: "Katchi S",      country: "Norway",                   flag: "🇳🇴", role: "Project & Tech Lead",                cat: "lead",     badgeCat: "tech",   featured: true },
+  { name: "Katchi S",      country: "Norway",                   flag: "🇳🇴", role: "Project & Tech Lead",                cat: "lead",     badgeCat: "tech",   featured: true, founder: true },
   { name: "Azeemah S",     country: "Bangladesh",               flag: "🇧🇩", role: "Project Co-lead & Social Media Lead", cat: "lead",     badgeCat: "social", featured: true },
 
   // ── Tech ──────────────────────────────────────────────────────────────
-  { name: "Katchi S",      country: "Norway",                   flag: "🇳🇴", role: "Tech Lead",           cat: "tech",                     featured: true },
+  { name: "Katchi S",      country: "Norway",                   flag: "🇳🇴", role: "Tech Lead",           cat: "tech",                     featured: true, founder: true },
   { name: "Kevin N",       country: "Norway",                   flag: "🇳🇴", role: "Data & Statistics",   cat: "tech" },
   { name: "Rishi U",       country: "India",                    flag: "🇮🇳", role: "Software Developer",  cat: "tech" },
 
@@ -201,6 +202,14 @@ export default function Team() {
                       {member.role}
                     </div>
                   )}
+                  {member.founder && (
+                    <div
+                      className="text-[10px] font-extrabold mt-2 px-3 py-0.5 rounded-full border border-amber-400 text-amber-900 tracking-wider shadow-sm"
+                      style={{ background: "linear-gradient(135deg, #fef9c3, #fde68a, #fcd34d)" }}
+                    >
+                      👑 Founder
+                    </div>
+                  )}
                   {member.founding && (
                     <div className="text-[9px] font-semibold mt-1.5 px-2 py-0.5 rounded-full border border-amber-300 text-amber-700 bg-amber-50 tracking-wide">
                       ✦ Founding Member
@@ -238,6 +247,14 @@ export default function Team() {
                   {member.role && (
                     <div className={`text-[10px] font-medium mt-2 px-2 py-0.5 rounded-full border ${BADGE[member.badgeCat ?? member.cat]}`}>
                       {member.role}
+                    </div>
+                  )}
+                  {member.founder && (
+                    <div
+                      className="text-[10px] font-extrabold mt-2 px-3 py-0.5 rounded-full border border-amber-400 text-amber-900 tracking-wider shadow-sm"
+                      style={{ background: "linear-gradient(135deg, #fef9c3, #fde68a, #fcd34d)" }}
+                    >
+                      👑 Founder
                     </div>
                   )}
                   {member.founding && (
